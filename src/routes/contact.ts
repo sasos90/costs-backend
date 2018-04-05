@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response, Router } from "express";
+import { NextFunction, Request, Response, Router } from 'express';
 
-import * as contactController from "../controllers/contact";
+import * as contactController from '../controllers/contact';
 class Contact {
   public router: Router;
   public constructor() {
@@ -8,8 +8,8 @@ class Contact {
     this.init();
   }
   private init() {
-    this.router.get("/", contactController.getContact);
-    this.router.post("/", contactController.postContact);
+    this.router.get('/', contactController.getContact);
+    this.router.post('/', contactController.postContact);
   }
 }
 

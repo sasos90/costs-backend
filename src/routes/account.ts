@@ -1,8 +1,8 @@
-import { NextFunction, Request, Response, Router } from "express";
+import { NextFunction, Request, Response, Router } from 'express';
 
-import * as userController from "../controllers/user";
+import * as userController from '../controllers/user';
 
-import * as passportConfig from "../config/passport";
+import * as passportConfig from '../config/passport';
 class Account {
   public router: Router;
   public constructor() {
@@ -10,11 +10,11 @@ class Account {
     this.init();
   }
   private init() {
-    this.router.get("/", passportConfig.isAuthenticated, userController.getAccount);
-    this.router.post("/profile", passportConfig.isAuthenticated, userController.postUpdateProfile);
-    this.router.post("/password", passportConfig.isAuthenticated, userController.postUpdatePassword);
-    this.router.post("/delete", passportConfig.isAuthenticated, userController.postDeleteAccount);
-    this.router.get("/unlink/:provider", passportConfig.isAuthenticated, userController.getOauthUnlink);
+    this.router.get('/', passportConfig.isAuthenticated, userController.getAccount);
+    this.router.post('/profile', passportConfig.isAuthenticated, userController.postUpdateProfile);
+    this.router.post('/password', passportConfig.isAuthenticated, userController.postUpdatePassword);
+    this.router.post('/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
+    this.router.get('/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
   }
 }
 
