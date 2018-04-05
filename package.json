@@ -4,13 +4,13 @@
   "description": "Node server written in TS.",
   "private": true,
   "scripts": {
-    "start": "npm run build && npm run watch",
+    "start": "npm run watch-ts",
     "build": "npm run build-ts && npm run tslint",
     "serve": "node dist/server.js",
     "watch": "concurrently -k -p \"[{name}]\" -n \"Sass,TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-ts\" \"nodemon dist/server.js\"",
     "test": "jest --forceExit --coverage",
     "build-ts": "tsc",
-    "watch-ts": "tsc -w",
+    "watch-ts": "nodemon src/server.ts",
     "tslint": "tslint -c tslint.json -p tsconfig.json"
   },
   "jest": {
@@ -51,7 +51,8 @@
     "passport-facebook": "^2.1.1",
     "passport-local": "^1.0.0",
     "pug": "^2.0.0-beta11",
-    "request": "^2.78.0"
+    "request": "^2.78.0",
+    "ts-node": "^5.0.1"
   },
   "devDependencies": {
     "@types/async": "^2.0.40",
