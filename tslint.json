@@ -1,6 +1,7 @@
 {
   "extends":["tslint:recommended"],
   "rules": {
+    "ordered-imports": [ false ],
     "class-name": true,
     "no-shadowed-variable": false,
     "comment-format": [
@@ -19,7 +20,7 @@
     "no-var-keyword": true,
     "quotemark": [
       true,
-      "double",
+      "single",
       "avoid-escape"
     ],
     "semicolon": [
