@@ -29,6 +29,7 @@ import apiRouter from './routes/api';
 import contactRouter from './routes/contact';
 import oauthRouter from './routes/oauth';
 import rootRouter from './routes/root';
+import costRouter from './routes/cost';
 
 /**
  * API keys and Passport configuration.
@@ -122,9 +123,7 @@ class App {
 
     // CRUD routes
     log.info('--- Registering routes ---');
-    this.express.delete('/cost', (req, res, next) => {
-      res.json('works');
-    });
+    this.express.use('/cost', costRouter);
   }
 
   private launchConf() {
