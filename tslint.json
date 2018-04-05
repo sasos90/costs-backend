@@ -56,7 +56,10 @@
     ],
     "no-internal-module": true,
     "no-trailing-whitespace": true,
+    "trailing-comma": false,
     "no-null-keyword": true,
+    "object-literal-sort-keys": false,
+    "no-var-requires": false,
     "prefer-const": true,
     "jsdoc-format": true
   }

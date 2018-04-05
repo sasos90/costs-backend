@@ -35,6 +35,23 @@ import rootRouter from './routes/root';
  */
 import * as passportConfig from './config/passport';
 import {Router} from 'express';
+import * as winston from 'winston';
+const winstonDailyRotateFile = require('winston-daily-rotate-file');
+
+export let log = new (winston.Logger)({
+  level: 'info',
+  transports: [
+    // new (winston.transports.File)({ filename: 'logs/logfile.log' }),
+    new (winston.transports.DailyRotateFile)({
+      filename: 'logs/log-%DATE%.log',
+      datePattern: 'YYYY-MM-DD-HH',
+      zippedArchive: true,
+      maxSize: '20m',
+      maxFiles: '10d'
+    })
+  ]
+});
+
 class App {
 
   // ref to Express instance
@@ -44,6 +61,7 @@ class App {
 
   constructor() {
     this.express = express();
+    this.router = Router();
     this.middleware();
     this.routes();
     this.launchConf();
@@ -101,6 +119,9 @@ class App {
     this.express.use('/auth', oauthRouter);
     this.express.use('/account', accountRouter);
     this.express.use('/contact', contactRouter);
+
+    // CRUD routes
+    log.info('--- Registering routes ---');
     this.express.delete('/cost', (req, res, next) => {
       res.json('works');
     });
