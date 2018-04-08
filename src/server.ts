@@ -128,7 +128,9 @@ class App {
 
   private launchConf() {
     // mongoose.Promise = global.Promise;
-    mongoose.connect(process.env.MONGODB_URI || process.env.MONGOLAB_URI);
+    mongoose.connect(process.env.MONGODB_URI || process.env.MONGOLAB_URI, {
+      useMongoClient: true
+    });
 
     mongoose.connection.on('error', () => {
       // tslint:disable-next-line:no-console
