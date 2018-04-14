@@ -42,7 +42,7 @@ class Api {
     this.router.get('/costs', apiController.getAllCosts);
     this.router.get('/costs/:id', apiController.getCost);
     this.router.post('/costs', apiController.createCost);
-    this.router.put('/costs/:id', apiController.getApi);
+    this.router.put('/costs/:id', apiController.updateCost);
     this.router.delete('/costs/:id', apiController.getApi);
   }
 }

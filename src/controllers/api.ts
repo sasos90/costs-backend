@@ -26,6 +26,16 @@ export let getAllCosts = async (req: Request, res: Response, next: NextFunction)
   return res.json(ResponseMsg.success(costs));
 };
 
+export let updateCost = async (req: Request, res: Response, next: NextFunction) => {
+  const cost: ICost = req.body;
+  const costUpdated: ICost = await Cost
+    .findByIdAndUpdate(req.params.id, cost, {new: true})
+    .populate('user', '-password')
+    .lean()
+    .exec() as ICost;
+  return res.json(ResponseMsg.success(costUpdated));
+};
+
 export let createCost = async (req: Request, res: Response, next: NextFunction) => {
   // const cost: ICost = req.body;
   const costReq: ICost = req.body;
