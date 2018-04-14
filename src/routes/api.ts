@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import * as apiController from '../controllers/api';
+import * as categoryController from '../controllers/category';
 import * as winston from 'winston';
-import { JsonWebTokenError, NotBeforeError, TokenExpiredError, verify, VerifyCallback } from 'jsonwebtoken';
+import { JsonWebTokenError, NotBeforeError, TokenExpiredError, verify } from 'jsonwebtoken';
 import * as HttpStatus from 'http-status-codes';
 import { ResponseMsg } from '../../helper/response-msg';
-import * as mongoose from 'mongoose';
 import User from '../models/User';
 import { IUser } from '../models/i-user';
 
@@ -44,6 +44,13 @@ class Api {
     this.router.post('/costs', apiController.createCost);
     this.router.put('/costs/:id', apiController.updateCost);
     this.router.delete('/costs/:id', apiController.deleteCost);
+
+    // CRUD operations for category
+    this.router.get('/category', categoryController.getAllCategories);
+    this.router.get('/category/:id', categoryController.getCategory);
+    this.router.post('/category', categoryController.createCategory);
+    this.router.put('/category/:id', categoryController.updateCategory);
+    this.router.delete('/category/:id', categoryController.deleteCategory);
   }
 }
 
