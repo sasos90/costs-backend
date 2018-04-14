@@ -4,3 +4,5 @@ dist
 .audit.json
 *.log
 .env
+coverage
+

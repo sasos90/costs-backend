@@ -35,7 +35,7 @@ import costRouter from './routes/cost';
  * API keys and Passport configuration.
  */
 import * as passportConfig from './config/passport';
-import {Router} from 'express';
+import { Router } from 'express';
 import * as winston from 'winston';
 const winstonDailyRotateFile = require('winston-daily-rotate-file');
 
