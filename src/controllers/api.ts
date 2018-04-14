@@ -16,8 +16,9 @@ export let getApi = (req: Request, res: Response) => {
   res.status(HttpStatus.OK).end();
 };
 
-export let getAllCosts = (req: Request, res: Response, next: NextFunction) => {
-  return res.json(ResponseMsg.success([]));
+export let getAllCosts = async (req: Request, res: Response, next: NextFunction) => {
+  const costs: ICost[] = await Cost.find().populate('user', '-password').lean().exec() as ICost[];
+  return res.json(ResponseMsg.success(costs));
 };
 
 export let createCost = async (req: Request, res: Response, next: NextFunction) => {
