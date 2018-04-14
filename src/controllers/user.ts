@@ -7,9 +7,11 @@ import * as passport from 'passport';
 import { LocalStrategyInfo } from 'passport-local';
 import { AuthToken, default as User, UserModel } from '../models/User';
 import * as HttpStatus from 'http-status-codes';
-import {ResponseMsg} from "../../helper/response-msg";
-import * as mongoose from "mongoose";
-// const request = require('express-validator');
+import { ResponseMsg } from '../../helper/response-msg';
+import * as mongoose from 'mongoose';
+import { IUser } from '../models/i-user';
+import { sign, SignOptions } from 'jsonwebtoken';
+import * as winston from 'winston';
 
 /**
  * GET /login
@@ -40,17 +42,44 @@ export let postLogin = async (req: Request, res: Response, next: NextFunction) =
     return res.status(HttpStatus.BAD_REQUEST).json(ResponseMsg.error('Validation errors', errors.mapped()));
   }
 
-  const user: mongoose.Document = await User.findOne({ email: req.body.email }).exec();
+  let userDoc: mongoose.Document;
+  let user: IUser;
+  try {
+    userDoc = await User.findOne({ email: req.body.email }).exec();
+    if (userDoc) {
+      user = userDoc.toObject();
+    } else {
+      winston.info(`User "${req.body.email}" not found!`);
+      return res.status(HttpStatus.BAD_REQUEST).json(ResponseMsg.error('Invalid credentials'));
+    }
+  } catch (err) {
+    winston.error('Error at checking the existing user!', err);
+    return res.status(HttpStatus.BAD_REQUEST).json(ResponseMsg.error('Something went wrong', err));
+  }
 
-  (user as any).comparePassword(req.body.password, (err: Error, isMatch: boolean) => {
+  (userDoc as any).comparePassword(req.body.password, (err: Error, isMatch: boolean) => {
     if (isMatch) {
-      return res.json(ResponseMsg.success({
-        msg: 'Successfull login!',
-        token: 'something..'
-      }));
+      return makeLogin(res, user);
     }
     return res.status(HttpStatus.BAD_REQUEST).json(ResponseMsg.error('Invalid credentials'));
   });
+};
+
+export let makeLogin = (res: Response, user: IUser) => {
+  // Create JWT token
+  const payload = {
+    email: user.email
+  };
+  const token = sign(payload, process.env.JWT_SECRET, {
+    expiresIn: '24h'
+  } as SignOptions);
+
+  delete user.password;
+  return res.json(ResponseMsg.success({
+    msg: 'Successfull login!',
+    user,
+    token,
+  }));
 };
 
 /**
@@ -79,7 +108,7 @@ export let postSignup = async (req: Request, res: Response, next: NextFunction) 
     return res.status(HttpStatus.BAD_REQUEST).json(ResponseMsg.error('Validation errors', errors.mapped()));
   }
 
-  const user = new User({
+  const userDoc = new User({
     email: req.body.email,
     password: req.body.password,
   });
@@ -92,9 +121,10 @@ export let postSignup = async (req: Request, res: Response, next: NextFunction) 
         .status(HttpStatus.BAD_REQUEST)
         .json(ResponseMsg.error('Account with that email address already exists.'));
     }
-    user.save((err) => {
+    userDoc.save((err) => {
       if (err) { return next(err); }
-      return res.json({ user });
+      const user: IUser = userDoc.toObject();
+      makeLogin(res, user);
     });
   });
 };
