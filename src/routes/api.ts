@@ -4,6 +4,9 @@ import * as winston from 'winston';
 import { JsonWebTokenError, NotBeforeError, TokenExpiredError, verify, VerifyCallback } from 'jsonwebtoken';
 import * as HttpStatus from 'http-status-codes';
 import { ResponseMsg } from '../../helper/response-msg';
+import * as mongoose from 'mongoose';
+import User from '../models/User';
+import { IUser } from '../models/i-user';
 
 class Api {
   public router: Router;
@@ -18,13 +21,15 @@ class Api {
       if (token && token !== '') {
         // Verify the JWT
         return verify(token, process.env.JWT_SECRET,
-          (err: JsonWebTokenError | NotBeforeError | TokenExpiredError, decoded: object | string) => {
+          async (err: JsonWebTokenError | NotBeforeError | TokenExpiredError, decoded: object | string) => {
           if (err) {
             winston.error('Token verifying failed', err);
             return res.status(HttpStatus.BAD_REQUEST).json(ResponseMsg.error('Failed to authenticate token!'));
           } else {
             // Store decoded data to locals decoded.
             (res as any).locals.decoded = decoded;
+            const user: IUser = await User.findOne({ email: (decoded as any).email }).lean().exec() as IUser;
+            (res as any).locals.user = user;
             return next();
           }
         });
