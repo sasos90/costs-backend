@@ -8,6 +8,7 @@ import { LocalStrategyInfo } from 'passport-local';
 import { AuthToken, default as User, UserModel } from '../models/User';
 import * as HttpStatus from 'http-status-codes';
 import {ResponseMsg} from "../../helper/response-msg";
+import * as mongoose from "mongoose";
 // const request = require('express-validator');
 
 /**
@@ -27,30 +28,29 @@ export let getLogin = (req: Request, res: Response) => {
  * POST /login
  * Sign in using email and password.
  */
-export let postLogin = (req: Request, res: Response, next: NextFunction) => {
+export let postLogin = async (req: Request, res: Response, next: NextFunction) => {
   req.assert('email', 'Email is not valid').isEmail();
   req.assert('password', 'Password cannot be blank').notEmpty();
   req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
 
-  const errors = req.validationErrors();
+  const errors = await req.getValidationResult();
 
-  if (errors) {
+  if (!errors.isEmpty()) {
     req.flash('errors', errors);
-    return res.redirect('/login');
+    return res.status(HttpStatus.BAD_REQUEST).json(ResponseMsg.error('Validation errors', errors.mapped()));
   }
 
-  /*passport.authenticate('local', (err: Error, user: UserModel, info: LocalStrategyInfo) => {
-    if (err) { return next(err); }
-    if (!user) {
-      req.flash('errors', info.message);
-      return res.redirect('/login');
+  const user: mongoose.Document = await User.findOne({ email: req.body.email }).exec();
+
+  (user as any).comparePassword(req.body.password, (err: Error, isMatch: boolean) => {
+    if (isMatch) {
+      return res.json(ResponseMsg.success({
+        msg: 'Successfull login!',
+        token: 'something..'
+      }));
     }
-    req.logIn(user, (err) => {
-      if (err) { return next(err); }
-      req.flash('success', { msg: 'Success! You are logged in.' });
-      res.redirect(req.session.returnTo || '/');
-    });
-  })(req, res, next);*/
+    return res.status(HttpStatus.BAD_REQUEST).json(ResponseMsg.error('Invalid credentials'));
+  });
 };
 
 /**
