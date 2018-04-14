@@ -23,8 +23,8 @@ class Api {
             winston.error('Token verifying failed', err);
             return res.status(HttpStatus.BAD_REQUEST).json(ResponseMsg.error('Failed to authenticate token!'));
           } else {
-            // Store decoded data to locals user.
-            (res as any).locals.user = decoded;
+            // Store decoded data to locals decoded.
+            (res as any).locals.decoded = decoded;
             return next();
           }
         });
@@ -36,7 +36,7 @@ class Api {
     // CRUD operations for costs
     this.router.get('/costs', apiController.getAllCosts);
     this.router.get('/costs/:id', apiController.getApi);
-    this.router.post('/costs', apiController.getApi);
+    this.router.post('/costs', apiController.createCost);
     this.router.put('/costs/:id', apiController.getApi);
     this.router.delete('/costs/:id', apiController.getApi);
   }
