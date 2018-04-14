@@ -36,6 +36,13 @@ export let updateCost = async (req: Request, res: Response, next: NextFunction) 
   return res.json(ResponseMsg.success(costUpdated));
 };
 
+export let deleteCost = async (req: Request, res: Response, next: NextFunction) => {
+  await Cost.findByIdAndRemove(req.params.id).exec();
+  return res.json(ResponseMsg.success({
+    msg: `Item with ID "${req.params.id}" was deleted!`
+  }));
+};
+
 export let createCost = async (req: Request, res: Response, next: NextFunction) => {
   // const cost: ICost = req.body;
   const costReq: ICost = req.body;
