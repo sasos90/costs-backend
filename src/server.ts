@@ -14,6 +14,7 @@ import * as mongoose from 'mongoose';
 import * as logger from 'morgan';
 import * as passport from 'passport';
 import * as path from 'path';
+import * as bluebird from 'bluebird';
 import expressValidator = require('express-validator');
 
 /**
@@ -123,6 +124,7 @@ class App {
 
   private launchConf() {
     // mongoose.Promise = global.Promise;
+    (mongoose as any).Promise = bluebird;
     mongoose.connect(process.env.MONGODB_URI || process.env.MONGOLAB_URI, {
       useMongoClient: true
     });
