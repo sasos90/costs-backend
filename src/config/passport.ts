@@ -8,10 +8,10 @@ import * as request from 'request';
 import { NextFunction, Request, Response } from 'express';
 import { default as User } from '../models/User';
 
-const LocalStrategy = passportLocal.Strategy;
-const FacebookStrategy = passportFacebook.Strategy;
+// const LocalStrategy = passportLocal.Strategy;
+// const FacebookStrategy = passportFacebook.Strategy;
 
-passport.serializeUser<any, any>((user, done) => {
+/*passport.serializeUser<any, any>((user, done) => {
   done(undefined, user.id);
 });
 
@@ -21,9 +21,9 @@ passport.deserializeUser((id, done) => {
   });
 });
 
-/**
+/!**
  * Sign in using Email and Password.
- */
+ *!/
 passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
   User.findOne({ email: email.toLowerCase() }, (err, user: any) => {
     if (err) { return done(err); }
@@ -38,7 +38,7 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, don
       return done(undefined, false, { message: 'Invalid email or password.' });
     });
   });
-}));
+}));*/
 
 /**
  * OAuth Strategy Overview

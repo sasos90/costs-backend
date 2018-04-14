@@ -87,8 +87,6 @@ class App {
         url: process.env.MONGODB_URI || process.env.MONGOLAB_URI,
       }),
     }));
-    this.express.use(passport.initialize());
-    this.express.use(passport.session());
     this.express.use(flash());
     this.express.use(lusca.xframe('SAMEORIGIN'));
     this.express.use(lusca.xssProtection(true));

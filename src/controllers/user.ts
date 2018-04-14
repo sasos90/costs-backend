@@ -39,7 +39,7 @@ export let postLogin = (req: Request, res: Response, next: NextFunction) => {
     return res.redirect('/login');
   }
 
-  passport.authenticate('local', (err: Error, user: UserModel, info: LocalStrategyInfo) => {
+  /*passport.authenticate('local', (err: Error, user: UserModel, info: LocalStrategyInfo) => {
     if (err) { return next(err); }
     if (!user) {
       req.flash('errors', info.message);
@@ -50,7 +50,7 @@ export let postLogin = (req: Request, res: Response, next: NextFunction) => {
       req.flash('success', { msg: 'Success! You are logged in.' });
       res.redirect(req.session.returnTo || '/');
     });
-  })(req, res, next);
+  })(req, res, next);*/
 };
 
 /**
@@ -94,12 +94,7 @@ export let postSignup = async (req: Request, res: Response, next: NextFunction) 
     }
     user.save((err) => {
       if (err) { return next(err); }
-      req.logIn(user, (err) => {
-        if (err) {
-          return next(err);
-        }
-        res.json({ user });
-      });
+      return res.json({ user });
     });
   });
 };
