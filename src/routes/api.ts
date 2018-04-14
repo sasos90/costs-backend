@@ -34,7 +34,7 @@ class Api {
     this.router.get('/', apiController.getApi);
 
     // CRUD operations for costs
-    this.router.get('/costs', apiController.getApi);
+    this.router.get('/costs', apiController.getAllCosts);
     this.router.get('/costs/:id', apiController.getApi);
     this.router.post('/costs', apiController.getApi);
     this.router.put('/costs/:id', apiController.getApi);
