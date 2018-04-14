@@ -25,17 +25,13 @@ dotenv.config({ path: '.env' });
 /**
  * Routes
  */
-import accountRouter from './routes/account';
 import apiRouter from './routes/api';
-import contactRouter from './routes/contact';
 import oauthRouter from './routes/oauth';
 import rootRouter from './routes/root';
-import costRouter from './routes/cost';
 
 /**
  * API keys and Passport configuration.
  */
-import * as passportConfig from './config/passport';
 import { Router } from 'express';
 import * as winston from 'winston';
 const winstonDailyRotateFile = require('winston-daily-rotate-file');
@@ -73,6 +69,7 @@ class App {
     this.express.set('port', process.env.PORT || 3000);
     this.express.set('views', path.join(__dirname, '../views'));
     this.express.set('view engine', 'pug');
+    this.express.set('jwt_secret', process.env.JWT_SECRET);
     this.express.use(compression());
     this.express.use(logger('dev'));
     this.express.use(bodyParser.json());

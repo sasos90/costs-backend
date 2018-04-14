@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response, Router } from 'express';
-
 import * as apiController from '../controllers/api';
+import * as winston from 'winston';
 
-import * as passportConfig from '../config/passport';
 class Api {
   public router: Router;
   public constructor() {
@@ -10,6 +9,11 @@ class Api {
     this.init();
   }
   private init() {
+    this.router.use((req: Request, res: Response, next: NextFunction) => {
+      winston.info('Authentication');
+      const token = req.body.token || req.query.token || req.headers['x-access-token'];
+      next();
+    });
     this.router.get('/', apiController.getApi);
 
     // CRUD operations for costs
