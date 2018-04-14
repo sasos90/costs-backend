@@ -58,7 +58,7 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, don
 /**
  * Sign in with Facebook.
  */
-passport.use(new FacebookStrategy({
+/*passport.use(new FacebookStrategy({
   callbackURL: '/auth/facebook/callback',
   clientID: process.env.FACEBOOK_ID,
   clientSecret: process.env.FACEBOOK_SECRET,
@@ -116,7 +116,7 @@ passport.use(new FacebookStrategy({
       });
     });
   }
-}));
+}));*/
 
 /**
  * Login Required middleware.

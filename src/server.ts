@@ -118,8 +118,6 @@ class App {
     this.express.use('/', rootRouter);
     this.express.use('/api', apiRouter);
     this.express.use('/auth', oauthRouter);
-    this.express.use('/account', accountRouter);
-    this.express.use('/contact', contactRouter);
 
     // CRUD routes
     log.info('--- Registering routes ---');

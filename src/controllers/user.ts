@@ -6,6 +6,8 @@ import * as nodemailer from 'nodemailer';
 import * as passport from 'passport';
 import { LocalStrategyInfo } from 'passport-local';
 import { AuthToken, default as User, UserModel } from '../models/User';
+import * as HttpStatus from 'http-status-codes';
+import {ResponseMsg} from "../../helper/response-msg";
 // const request = require('express-validator');
 
 /**
@@ -86,7 +88,9 @@ export let postSignup = (req: Request, res: Response, next: NextFunction) => {
     if (err) { return next(err); }
     if (existingUser) {
       req.flash('errors', { msg: 'Account with that email address already exists.' });
-      return res.redirect('/signup');
+      return res
+        .status(HttpStatus.BAD_REQUEST)
+        .json(ResponseMsg.error('Account with that email address already exists.'));
     }
     user.save((err) => {
       if (err) { return next(err); }
@@ -94,7 +98,7 @@ export let postSignup = (req: Request, res: Response, next: NextFunction) => {
         if (err) {
           return next(err);
         }
-        res.redirect('/');
+        res.json({ user });
       });
     });
   });
