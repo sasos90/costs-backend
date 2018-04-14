@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 import * as HttpStatus from 'http-status-codes';
 import { ResponseMsg } from '../../helper/response-msg';
 import Cost, { CostModel } from '../models/Cost';
+import { ICost } from '../models/i-cost';
+import { IUser } from '../models/i-user';
 
 /**
  * GET /api
@@ -20,7 +22,10 @@ export let getAllCosts = (req: Request, res: Response, next: NextFunction) => {
 
 export let createCost = async (req: Request, res: Response, next: NextFunction) => {
   // const cost: ICost = req.body;
+  const costReq: ICost = req.body;
+  const user: IUser = res.locals.user;
+  costReq.user = user._id as string;
   const costDoc = new Cost(req.body);
-  const cost: CostModel = await costDoc.save();
-  return res.json(ResponseMsg.success(cost));
+  const costDocNew: CostModel = await costDoc.save();
+  return res.json(ResponseMsg.success(costDocNew));
 };

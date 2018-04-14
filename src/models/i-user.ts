@@ -1,6 +1,7 @@
 import { AuthToken } from './User';
 
 export interface IUser {
+  _id: object | string;
   email: string;
   password: string;
   passwordResetToken: string;
