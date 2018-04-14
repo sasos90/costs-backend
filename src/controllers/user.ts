@@ -61,19 +61,6 @@ export let logout = (req: Request, res: Response) => {
 };
 
 /**
- * GET /signup
- * Signup page.
- */
-export let getSignup = (req: Request, res: Response) => {
-  if (req.user) {
-    return res.redirect('/');
-  }
-  res.render('account/signup', {
-    title: 'Create Account',
-  });
-};
-
-/**
  * POST /signup
  * Create a new local account.
  */
@@ -287,7 +274,7 @@ export let postReset = (req: Request, res: Response, next: NextFunction) => {
         service: 'SendGrid',
       });
       const mailOptions = {
-        from: 'express-ts@starter.com',
+        from: 'sasos90@gmail.com',
         subject: 'Your password has been changed',
         text: `Hello,\n\nThis is a confirmation that the password for \
         your account ${user.email} has just been changed.\n`,
@@ -301,19 +288,6 @@ export let postReset = (req: Request, res: Response, next: NextFunction) => {
   ], (err) => {
     if (err) { return next(err); }
     res.redirect('/');
-  });
-};
-
-/**
- * GET /forgot
- * Forgot Password page.
- */
-export let getForgot = (req: Request, res: Response) => {
-  if (req.isAuthenticated()) {
-    return res.redirect('/');
-  }
-  res.render('account/forgot', {
-    title: 'Forgot Password',
   });
 };
 
