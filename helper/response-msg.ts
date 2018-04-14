@@ -3,9 +3,7 @@ export class ResponseMsg {
     return { data };
   }
 
-  public static error(msg: string): object {
-    return {
-      errorMsg: msg
-    };
+  public static error(msg: string, data: object = {}): object {
+    return { msg, data };
   }
 }

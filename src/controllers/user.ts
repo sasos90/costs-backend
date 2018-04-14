@@ -66,17 +66,17 @@ export let logout = (req: Request, res: Response) => {
  * POST /signup
  * Create a new local account.
  */
-export let postSignup = (req: Request, res: Response, next: NextFunction) => {
+export let postSignup = async (req: Request, res: Response, next: NextFunction) => {
   req.assert('email', 'Email is not valid').isEmail();
   req.assert('password', 'Password must be at least 4 characters long').len({ min: 4 });
   req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
   req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
 
-  const errors = req.validationErrors();
+  const errors = await req.getValidationResult();
 
-  if (errors) {
+  if (!errors.isEmpty()) {
     req.flash('errors', errors);
-    return res.redirect('/signup');
+    return res.status(HttpStatus.BAD_REQUEST).json(ResponseMsg.error('Validation errors', errors.mapped()));
   }
 
   const user = new User({

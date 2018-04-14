@@ -115,13 +115,10 @@ class App {
    * Primary app routes.
    */
   private routes(): void {
+    log.info('--- Registering routes ---');
     this.express.use('/', rootRouter);
     this.express.use('/api', apiRouter);
     this.express.use('/auth', oauthRouter);
-
-    // CRUD routes
-    log.info('--- Registering routes ---');
-    this.express.use('/cost', costRouter);
   }
 
   private launchConf() {
