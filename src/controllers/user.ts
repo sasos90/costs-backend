@@ -71,7 +71,7 @@ export let makeLogin = (res: Response, user: IUser) => {
     email: user.email
   };
   const token = sign(payload, process.env.JWT_SECRET, {
-    expiresIn: '24h'
+    expiresIn: '7d'
   } as SignOptions);
 
   delete user.password;
