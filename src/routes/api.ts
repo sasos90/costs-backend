@@ -24,6 +24,9 @@ class Api {
           async (err: JsonWebTokenError | NotBeforeError | TokenExpiredError, decoded: object | string) => {
           if (err) {
             winston.error('Token verifying failed', err);
+            if ((err as TokenExpiredError).expiredAt) {
+              return res.status(HttpStatus.UNAUTHORIZED).json(ResponseMsg.error('Token has expired!'));
+            }
             return res.status(HttpStatus.UNAUTHORIZED).json(ResponseMsg.error('Failed to authenticate token!'));
           } else {
             // Store decoded data to locals decoded.
