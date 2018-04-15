@@ -6,7 +6,7 @@ export type CategoryModel = mongoose.Document & {
 
 const categorySchema = new mongoose.Schema({
   name: String,
-}, { timestamps: true });
+});
 
 const Category = mongoose.model<CategoryModel>('Category', categorySchema );
 export default Category;
