@@ -1,8 +1,6 @@
 import * as _ from 'lodash';
 import * as passport from 'passport';
-import * as passportFacebook from 'passport-facebook';
 import * as passportLocal from 'passport-local';
-import * as request from 'request';
 
 // import { User, UserType } from '../models/User';
 import { NextFunction, Request, Response } from 'express';

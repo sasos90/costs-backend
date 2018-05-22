@@ -11,8 +11,7 @@ class Oauth {
     this.router = Router();
     this.init();
   }
-  private init() {
-  }
+  private init() {}
 }
 
 const oauthRoutes = new Oauth();
