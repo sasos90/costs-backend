@@ -24,18 +24,18 @@ passport.deserializeUser((id, done) => {
 /!**
  * Sign in using Email and Password.
  *!/
-passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
-  User.findOne({ email: email.toLowerCase() }, (err, user: any) => {
+passport.use(new LocalStrategy({ usernameField: 'username' }, (username, password, done) => {
+  User.findOne({ username: username.toLowerCase() }, (err, user: any) => {
     if (err) { return done(err); }
     if (!user) {
-      return done(undefined, false, { message: `Email ${email} not found.` });
+      return done(undefined, false, { message: `Email ${username} not found.` });
     }
     user.comparePassword(password, (err: Error, isMatch: boolean) => {
       if (err) { return done(err); }
       if (isMatch) {
         return done(undefined, user);
       }
-      return done(undefined, false, { message: 'Invalid email or password.' });
+      return done(undefined, false, { message: 'Invalid username or password.' });
     });
   });
 }));*/
@@ -50,7 +50,7 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, don
  * - User is not logged in.
  *   - Check if it's a returning user.
  *     - If returning user, sign in and we are done.
- *     - Else check if there is an existing account with user's email.
+ *     - Else check if there is an existing account with user's username.
  *       - If there is, return an error message.
  *       - Else create a new account.
  */
@@ -63,7 +63,7 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, don
   clientID: process.env.FACEBOOK_ID,
   clientSecret: process.env.FACEBOOK_SECRET,
   passReqToCallback: true,
-  profileFields: ['name', 'email', 'link', 'locale', 'timezone'],
+  profileFields: ['name', 'username', 'link', 'locale', 'timezone'],
 }, (req: any, accessToken, refreshToken, profile, done) => {
   if (req.user) {
     User.findOne({ facebook: profile.id }, (err, existingUser) => {
@@ -93,16 +93,16 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, don
       if (existingUser) {
         return done(undefined, existingUser);
       }
-      User.findOne({ email: profile._json.email }, (err, existingEmailUser) => {
+      User.findOne({ username: profile._json.username }, (err, existingEmailUser) => {
         if (err) { return done(err); }
         if (existingEmailUser) {
           req.flash('errors', {
-            msg: 'There is already an account using this email address. \
+            msg: 'There is already an account using this username address. \
             Sign in to that account and link it with Facebook manually from Account Settings.' });
           done(err);
         } else {
           const user: any = new User();
-          user.email = profile._json.email;
+          user.username = profile._json.username;
           user.facebook = profile.id;
           user.tokens.push({ kind: 'facebook', accessToken });
           user.profile.name = `${profile.name.givenName} ${profile.name.familyName}`;

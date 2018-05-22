@@ -31,7 +31,7 @@ class Api {
           } else {
             // Store decoded data to locals decoded.
             (res as any).locals.decoded = decoded;
-            const user: IUser = await User.findOne({ email: (decoded as any).email }).lean().exec() as IUser;
+            const user: IUser = await User.findOne({ username: (decoded as any).username }).lean().exec() as IUser;
             (res as any).locals.user = user;
             return next();
           }
@@ -58,4 +58,5 @@ class Api {
 }
 
 const apiRoutes = new Api();
-export default apiRoutes.router;
+const router = apiRoutes.router;
+export default router;

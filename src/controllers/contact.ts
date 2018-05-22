@@ -36,10 +36,10 @@ export let postContact = (req: Request, res: Response) => {
   }
 
   const mailOptions = {
-    from: `${req.body.name} <${req.body.email}>`,
+    from: `${req.body.name} <${req.body.username}>`,
     subject: 'Contact Form',
     text: req.body.message,
-    to: 'your@email.com',
+    to: 'your@username.com',
   };
 
   transporter.sendMail(mailOptions, (err) => {

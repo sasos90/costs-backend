@@ -19,4 +19,5 @@ class Root {
 }
 
 const rootRoutes = new Root();
-export default rootRoutes.router;
+const router = rootRoutes.router;
+export default router;

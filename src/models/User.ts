@@ -3,7 +3,7 @@ import * as crypto from 'crypto';
 import * as mongoose from 'mongoose';
 
 export type UserModel = mongoose.Document & {
-  email: string,
+  username: string,
   password: string,
   passwordResetToken: string,
   passwordResetExpires: Date,
@@ -27,7 +27,7 @@ export interface AuthToken {
 }
 
 const userSchema = new mongoose.Schema({
-  email: { type: String, unique: true },
+  username: { type: String, unique: true },
   password: String,
   passwordResetExpires: Date,
   passwordResetToken: String,
@@ -72,10 +72,10 @@ userSchema.methods.gravatar = function(size: number) {
   if (!size) {
     size = 200;
   }
-  if (!this.email) {
+  if (!this.username) {
     return `https://gravatar.com/avatar/?s=${size}&d=retro`;
   }
-  const md5 = crypto.createHash('md5').update(this.email).digest('hex');
+  const md5 = crypto.createHash('md5').update(this.username).digest('hex');
   return `https://gravatar.com/avatar/${md5}?s=${size}&d=retro`;
 };
 

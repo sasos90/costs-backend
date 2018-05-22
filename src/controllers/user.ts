@@ -28,12 +28,12 @@ export let getLogin = (req: Request, res: Response) => {
 
 /**
  * POST /login
- * Sign in using email and password.
+ * Sign in using username and password.
  */
 export let postLogin = async (req: Request, res: Response, next: NextFunction) => {
-  req.assert('email', 'Email is not valid').isEmail();
+  // req.assert('username', 'Email is not valid').isEmail();
   req.assert('password', 'Password cannot be blank').notEmpty();
-  req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
+  // req.sanitize('username').normalizeEmail({ gmail_remove_dots: false });
 
   const errors = await req.getValidationResult();
 
@@ -45,11 +45,11 @@ export let postLogin = async (req: Request, res: Response, next: NextFunction) =
   let userDoc: mongoose.Document;
   let user: IUser;
   try {
-    userDoc = await User.findOne({ email: req.body.email }).exec();
+    userDoc = await User.findOne({ username: req.body.username }).exec();
     if (userDoc) {
       user = userDoc.toObject();
     } else {
-      winston.info(`User "${req.body.email}" not found!`);
+      winston.info(`User "${req.body.username}" not found!`);
       return res.status(HttpStatus.BAD_REQUEST).json(ResponseMsg.error('Invalid credentials'));
     }
   } catch (err) {
@@ -68,7 +68,7 @@ export let postLogin = async (req: Request, res: Response, next: NextFunction) =
 export let makeLogin = (res: Response, user: IUser) => {
   // Create JWT token
   const payload = {
-    email: user.email
+    username: user.username
   };
   const token = sign(payload, process.env.JWT_SECRET, {
     expiresIn: '7d'
@@ -109,17 +109,17 @@ export let postSignup = async (req: Request, res: Response, next: NextFunction) 
   }
 
   const userDoc = new User({
-    email: req.body.email,
+    username: req.body.username,
     password: req.body.password,
   });
 
-  User.findOne({ email: req.body.email }, (err, existingUser) => {
+  User.findOne({ username: req.body.username }, (err, existingUser) => {
     if (err) { return next(err); }
     if (existingUser) {
-      req.flash('errors', { msg: 'Account with that email address already exists.' });
+      req.flash('errors', { msg: 'Account with that username address already exists.' });
       return res
         .status(HttpStatus.BAD_REQUEST)
-        .json(ResponseMsg.error('Account with that email address already exists.'));
+        .json(ResponseMsg.error('Account with that username address already exists.'));
     }
     userDoc.save((err) => {
       if (err) { return next(err); }
@@ -144,8 +144,8 @@ export let getAccount = (req: Request, res: Response) => {
  * Update profile information.
  */
 export let postUpdateProfile = (req: Request, res: Response, next: NextFunction) => {
-  req.assert('email', 'Please enter a valid email address.').isEmail();
-  req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
+  // req.assert('username', 'Please enter a valid username address.').isEmail();
+  // req.sanitize('username').normalizeEmail({ gmail_remove_dots: false });
 
   const errors = req.validationErrors();
 
@@ -156,7 +156,7 @@ export let postUpdateProfile = (req: Request, res: Response, next: NextFunction)
 
   User.findById(req.user.id, (err, user: UserModel) => {
     if (err) { return next(err); }
-    user.email = req.body.email || '';
+    // user.username = req.body.username || '';
     user.profile.name = req.body.name || '';
     user.profile.gender = req.body.gender || '';
     user.profile.location = req.body.location || '';
@@ -164,7 +164,7 @@ export let postUpdateProfile = (req: Request, res: Response, next: NextFunction)
     user.save((err: WriteError) => {
       if (err) {
         if (err.code === 11000) {
-          req.flash('errors', { msg: 'The email address you have entered is already associated with an account.' });
+          req.flash('errors', { msg: 'The username address you have entered is already associated with an account.' });
           return res.redirect('/account');
         }
         return next(err);
@@ -306,8 +306,8 @@ export let postReset = (req: Request, res: Response, next: NextFunction) => {
         from: 'sasos90@gmail.com',
         subject: 'Your password has been changed',
         text: `Hello,\n\nThis is a confirmation that the password for \
-        your account ${user.email} has just been changed.\n`,
-        to: user.email,
+        your account ${user.username} has just been changed.\n`,
+        to: user.username,
       };
       transporter.sendMail(mailOptions, (err) => {
         req.flash('success', { msg: 'Success! Your password has been changed.' });
@@ -322,10 +322,10 @@ export let postReset = (req: Request, res: Response, next: NextFunction) => {
 
 /**
  * POST /forgot
- * Create a random token, then the send user an email with a reset link.
+ * Create a random token, then the send user an username with a reset link.
  */
 export let postForgot = (req: Request, res: Response, next: NextFunction) => {
-  req.assert('email', 'Please enter a valid email address.').isEmail();
+  req.assert('email', 'Please enter a valid username address.').isEmail();
   req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
 
   const errors = req.validationErrors();
@@ -345,10 +345,10 @@ export let postForgot = (req: Request, res: Response, next: NextFunction) => {
     },
     // tslint:disable-next-line:ban-types
     function setRandomToken(token: AuthToken, done: Function) {
-      User.findOne({ email: req.body.email }, (err, user: any) => {
+      User.findOne({ username: req.body.username }, (err, user: any) => {
         if (err) { return done(err); }
         if (!user) {
-          req.flash('errors', { msg: 'Account with that email address does not exist.' });
+          req.flash('errors', { msg: 'Account with that username address does not exist.' });
           return res.redirect('/forgot');
         }
         user.passwordResetToken = token;
@@ -375,10 +375,10 @@ export let postForgot = (req: Request, res: Response, next: NextFunction) => {
           Please click on the following link, or paste this into your browser to complete the process:\n\n
           http://${req.headers.host}/reset/${token}\n\n
           If you did not request this, please ignore this email and your password will remain unchanged.\n`,
-        to: user.email,
+        to: user.username,
       };
       transporter.sendMail(mailOptions, (err) => {
-        req.flash('info', { msg: `An e-mail has been sent to ${user.email} with further instructions.` });
+        req.flash('info', { msg: `An e-mail has been sent to ${user.username} with further instructions.` });
         done(err);
       });
     },

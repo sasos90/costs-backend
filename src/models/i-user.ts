@@ -2,7 +2,7 @@ import { AuthToken } from './User';
 
 export interface IUser {
   _id: object | string;
-  email: string;
+  username: string;
   password: string;
   passwordResetToken: string;
   passwordResetExpires: Date;
