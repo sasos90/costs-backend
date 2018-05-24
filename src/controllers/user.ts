@@ -96,10 +96,7 @@ export let logout = (req: Request, res: Response) => {
  * Create a new local account.
  */
 export let postSignup = async (req: Request, res: Response, next: NextFunction) => {
-  req.assert('email', 'Email is not valid').isEmail();
   req.assert('password', 'Password must be at least 4 characters long').len({ min: 4 });
-  req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
-  req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
 
   const errors = await req.getValidationResult();
 
