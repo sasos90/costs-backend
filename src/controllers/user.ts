@@ -32,6 +32,7 @@ export let getLogin = (req: Request, res: Response) => {
  */
 export let postLogin = async (req: Request, res: Response, next: NextFunction) => {
   // req.assert('username', 'Email is not valid').isEmail();
+  req.assert('username', 'Username cannot be blank').notEmpty();
   req.assert('password', 'Password cannot be blank').notEmpty();
   // req.sanitize('username').normalizeEmail({ gmail_remove_dots: false });
 
