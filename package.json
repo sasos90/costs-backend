@@ -4,8 +4,8 @@
   "description": "Node server written in TS.",
   "private": true,
   "scripts": {
-    "start": "npm run watch-ts",
-    "build": "npm run build-ts && npm run tslint",
+    "start": "yarn run watch-ts",
+    "build": "yarn run build-ts && yarn run tslint",
     "serve": "node dist/server.js",
     "test": "jest --forceExit --coverage",
     "build-ts": "tsc",
