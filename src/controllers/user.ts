@@ -8,10 +8,10 @@ import { LocalStrategyInfo } from 'passport-local';
 import { AuthToken, default as User, UserModel } from '../models/User';
 import * as HttpStatus from 'http-status-codes';
 import { ResponseMsg } from '../../helper/response-msg';
-import * as mongoose from 'mongoose';
 import { IUser } from '../models/i-user';
 import { sign, SignOptions } from 'jsonwebtoken';
 import * as winston from 'winston';
+import * as mongoose from 'mongoose';
 
 /**
  * GET /login
