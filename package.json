@@ -6,7 +6,7 @@
   "scripts": {
     "start": "yarn run watch-ts",
     "build": "yarn run build-ts && yarn run tslint",
-    "serve": "node dist/server.js",
+    "serve": "node dist/src/server.js",
     "test": "jest --forceExit --coverage",
     "build-ts": "tsc",
     "watch-ts": "nodemon src/server.ts",

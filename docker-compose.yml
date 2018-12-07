@@ -1,0 +1,14 @@
+version: "2"
+services:
+  node:
+    container_name: costs-backend
+    build: .
+    ports:
+      - "3000:3000"
+    links:
+      - mongo
+  mongo:
+    container_name: costs-mongo
+    image: mongo
+    ports:
+      - "27017:27017"
