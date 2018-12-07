@@ -14,6 +14,7 @@ RUN yarn install
 
 # Bundle app source
 COPY . .
+COPY .env.live .env
 
 RUN yarn run build
 
