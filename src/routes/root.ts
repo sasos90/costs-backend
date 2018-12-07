@@ -9,6 +9,9 @@ class Root {
     this.init();
   }
   private init() {
+    this.router.get('/', (req, res) => {
+      return res.send('Latest release: 4.12.2018').end();
+    });
     this.router.post('/login', userController.postLogin);
     this.router.get('/logout', userController.logout);
     this.router.post('/forgot', userController.postForgot);
