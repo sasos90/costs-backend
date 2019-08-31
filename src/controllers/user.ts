@@ -111,7 +111,7 @@ export let postSignup = async (req: Request, res: Response, next: NextFunction) 
     password: req.body.password,
   });
 
-  User.findOne({ username: req.body.username }, (err, existingUser) => {
+  User.findOne({ username: req.body.username }, (err: any, existingUser: any) => {
     if (err) { return next(err); }
     if (existingUser) {
       req.flash('errors', { msg: 'Account with that username address already exists.' });
